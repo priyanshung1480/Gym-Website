@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GYMNASTIK — Elite Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fire: #ff3c00;
+    --fire-dim: rgba(255,60,0,0.15);
+    --gold: #c9a84c;
+    --bg: #080808;
+    --surface: #111111;
+    --surface2: #181818;
+    --text: #e8e8e8;
+    --muted: #777;
+    --border: rgba(255,255,255,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--fire); }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 12px 60px; }
+  .nav-brand {
+    font-family: 'Montserrat', sans-serif; font-weight: 900;
+    font-size: 22px; letter-spacing: 1px;
+    color: var(--fire);
+    text-decoration: none;
+  }
+  .nav-brand span { color: white; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); font-size: 13px; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 600;
+  }
+  .nav-links a:hover { color: white; }
+  .nav-cta {
+    background: var(--fire); color: white;
+    padding: 10px 26px; font-size: 13px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .nav-cta:hover { background: white; color: var(--fire); transform: scale(1.03); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { display: block; width: 26px; height: 2px; background: white; transition: 0.3s; }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh; min-height: 700px;
+    position: relative; display: flex; align-items: center; justify-content: center;
+    text-align: center; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1800&q=80') center/cover no-repeat;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(8,8,8,0.55) 0%,
+      rgba(8,8,8,0.65) 60%,
+      rgba(8,8,8,1) 100%
+    );
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 900px; padding: 0 24px; }
+  .hero-tag {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--fire); border: 1px solid var(--fire);
+    padding: 6px 18px; margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero h1 {
+    font-family: 'Montserrat', sans-serif; font-weight: 900;
+    font-size: clamp(42px, 7vw, 84px);
+    line-height: 1.05; letter-spacing: -1px;
+    animation: fadeUp 0.9s 0.15s ease both;
+  }
+  .hero h1 em { color: var(--fire); font-style: normal; }
+  .hero p {
+    font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.65);
+    max-width: 520px; margin: 28px auto 0;
+    animation: fadeUp 1s 0.3s ease both;
+    line-height: 1.7;
+  }
+  .hero-btns {
+    display: flex; gap: 16px; justify-content: center; margin-top: 44px;
+    animation: fadeUp 1s 0.45s ease both;
+    flex-wrap: wrap;
+  }
+  .btn-fire {
+    background: var(--fire); color: white;
+    padding: 16px 40px; font-size: 13px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 600; font-family: 'Open Sans', sans-serif;
+    border: none; cursor: pointer; text-decoration: none;
+    transition: all 0.3s; display: inline-block;
+  }
+  .btn-fire:hover { background: white; color: var(--fire); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: white;
+    padding: 16px 40px; font-size: 13px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 600; font-family: 'Open Sans', sans-serif;
+    border: 1px solid rgba(255,255,255,0.3); cursor: pointer; text-decoration: none;
+    transition: all 0.3s; display: inline-block;
+  }
+  .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
+
+  /* scroll hint */
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    animation: bounce 2s infinite;
+  }
+  .scroll-hint span { font-size: 10px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+  .scroll-line { width: 1px; height: 50px; background: linear-gradient(var(--fire), transparent); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 60px;
+    display: flex; justify-content: space-around; gap: 20px; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Montserrat', sans-serif; font-weight: 900;
+    font-size: 42px; color: var(--fire); line-height: 1;
+  }
+  .stat-num sup { font-size: 18px; }
+  .stat-label { font-size: 12px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-top: 6px; }
+
+  /* ── SECTION BASE ── */
+  section { padding: 100px 60px; }
+  .section-label {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--fire); margin-bottom: 14px; display: block;
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif; font-weight: 900;
+    font-size: clamp(28px, 4vw, 48px); letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .section-sub { color: var(--muted); font-size: 16px; font-weight: 300; margin-top: 14px; line-height: 1.7; max-width: 520px; }
+  .section-head { margin-bottom: 64px; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--bg); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-img-wrap { position: relative; }
+  .about-img-wrap img { width: 100%; height: 560px; object-fit: cover; display: block; }
+  .about-badge {
+    position: absolute; bottom: -24px; right: -24px;
+    background: var(--fire); padding: 28px 32px; text-align: center;
+  }
+  .about-badge strong { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 36px; display: block; line-height: 1; }
+  .about-badge span { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+  .about-text { padding-right: 20px; }
+  .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
+  .about-feat {
+    padding: 20px; border: 1px solid var(--border);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .about-feat:hover { border-color: var(--fire); background: var(--fire-dim); }
+  .about-feat-icon { font-size: 24px; margin-bottom: 10px; }
+  .about-feat h4 { font-size: 14px; letter-spacing: 1px; margin-bottom: 6px; }
+  .about-feat p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── SERVICES ── */
+  #services { background: var(--surface); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: var(--border);
+  }
+  .service-card {
+    background: var(--surface2);
+    padding: 40px 30px; position: relative; overflow: hidden;
+    cursor: default; transition: background 0.4s;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .service-card::before {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 3px;
+    background: var(--fire); transform: scaleX(0);
+    transform-origin: left; transition: transform 0.4s;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { background: #1e1e1e; }
+  .service-icon { font-size: 36px; }
+  .service-card h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0; }
+  .service-card p { font-size: 13px; color: var(--muted); line-height: 1.7; flex: 1; }
+  .service-tag {
+    display: inline-block; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--fire);
+  }
+
+  /* ── PLANS ── */
+  #plans { background: var(--bg); }
+  .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .plan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 50px 40px; position: relative;
+    transition: transform 0.4s, border-color 0.4s, box-shadow 0.4s;
+    overflow: hidden;
+  }
+  .plan-card.featured {
+    border-color: var(--fire);
+    background: var(--surface2);
+  }
+  .plan-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute; top: 0; right: 0;
+    background: var(--fire); color: white;
+    font-size: 9px; letter-spacing: 2px;
+    padding: 6px 14px;
+  }
+  .plan-card:hover { transform: translateY(-8px); border-color: var(--fire); box-shadow: 0 24px 60px rgba(255,60,0,0.15); }
+  .plan-name { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); }
+  .plan-price {
+    font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 54px; line-height: 1;
+    color: white; margin: 20px 0;
+  }
+  .plan-price sup { font-size: 22px; color: var(--fire); }
+  .plan-price sub { font-size: 14px; color: var(--muted); font-family: 'Open Sans', sans-serif; }
+  .plan-divider { height: 1px; background: var(--border); margin: 28px 0; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .plan-features li { font-size: 14px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 10px; }
+  .plan-features li::before { content: '✓'; color: var(--fire); font-weight: 700; }
+  .plan-features li.no::before { content: '—'; color: var(--muted); }
+  .plan-features li.no { color: var(--muted); }
+  .plan-cta { display: block; text-align: center; margin-top: 40px; }
+
+  /* ── GALLERY ── */
+  #gallery { background: var(--surface); padding: 100px 0; }
+  .gallery-head { padding: 0 60px; margin-bottom: 50px; }
+  .gallery-track {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 280px 280px;
+    gap: 4px;
+  }
+  .gallery-item { overflow: hidden; position: relative; }
+  .gallery-item.tall { grid-row: span 2; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; display: block; }
+  .gallery-item:hover img { transform: scale(1.07); }
+  .gallery-item::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,60,0,0); transition: background 0.4s;
+  }
+  .gallery-item:hover::after { background: rgba(255,60,0,0.08); }
+
+  /* ── BMI ── */
+  #bmi { background: var(--bg); }
+  .bmi-wrap { max-width: 600px; margin: 0 auto; text-align: center; }
+  .bmi-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0 24px; }
+  .input-group-g { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+  .input-group-g label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .input-group-g input {
+    background: var(--surface); color: white;
+    border: 1px solid var(--border); padding: 16px 20px;
+    font-size: 16px; font-family: 'Open Sans', sans-serif;
+    transition: border-color 0.3s; outline: none;
+  }
+  .input-group-g input:focus { border-color: var(--fire); }
+  .bmi-result {
+    margin-top: 32px; padding: 28px; border: 1px solid var(--border);
+    display: none;
+  }
+  .bmi-result.show { display: block; animation: fadeUp 0.5s ease both; }
+  .bmi-num { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 52px; color: var(--fire); line-height: 1; }
+  .bmi-category { font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .bmi-bar { height: 6px; background: var(--surface); margin: 20px 0; border-radius: 3px; overflow: hidden; position: relative; }
+  .bmi-bar-fill { height: 100%; background: linear-gradient(to right, #4ade80, #facc15, var(--fire), #dc2626); }
+  .bmi-marker { position: absolute; top: 50%; transform: translateY(-50%) translateX(-50%); width: 14px; height: 14px; background: white; border-radius: 50%; border: 2px solid var(--fire); transition: left 0.8s ease; }
+
+  /* ── JOIN / PAYMENT ── */
+  #join { background: var(--surface); }
+  .join-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .qr-box {
+    border: 1px solid var(--border); padding: 50px;
+    text-align: center; background: var(--surface2);
+  }
+  .qr-box h3 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: 0; margin-bottom: 24px; }
+  .qr-placeholder {
+    width: 200px; height: 200px; margin: 0 auto;
+    background: white; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .qr-placeholder img { width: 100%; height: 100%; object-fit: contain; }
+  .qr-placeholder .qr-corner {
+    position: absolute; width: 20px; height: 20px;
+    border: 3px solid var(--fire);
+  }
+  .qr-corner.tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+  .qr-corner.tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
+  .qr-corner.bl { bottom: 4px; left: 4px; border-right: none; border-top: none; }
+  .qr-corner.br { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+  .qr-note { font-size: 13px; color: var(--muted); margin-top: 24px; line-height: 1.7; }
+  .qr-phone { font-size: 20px; font-family: 'Montserrat', sans-serif; font-weight: 900; letter-spacing: 2px; color: white; margin-top: 12px; }
+  .form-box h3 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: 0; margin-bottom: 32px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .form-group label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .form-group input, .form-group select {
+    background: var(--surface2); color: white;
+    border: 1px solid var(--border); padding: 16px 20px;
+    font-size: 15px; font-family: 'Open Sans', sans-serif;
+    outline: none; transition: border-color 0.3s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--fire); }
+  .form-group select option { background: #1c1c1c; }
+  .whatsapp-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  /* ── MAP ── */
+  #location { background: var(--bg); padding: 0; }
+  .map-header { padding: 80px 60px 50px; }
+  .map-wrap {
+    position: relative;
+    height: 480px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .map-wrap iframe { width: 100%; height: 100%; border: none; filter: grayscale(60%) invert(90%) contrast(85%); }
+  .map-overlay {
+    position: absolute; top: 0; left: 0; bottom: 0;
+    width: 320px; background: var(--bg);
+    padding: 48px 40px; display: flex; flex-direction: column; gap: 28px;
+    border-right: 1px solid var(--border);
+    z-index: 2;
+  }
+  .map-detail { display: flex; gap: 16px; align-items: flex-start; }
+  .map-icon { font-size: 20px; margin-top: 2px; }
+  .map-detail h4 { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--fire); margin-bottom: 6px; }
+  .map-detail p { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.6; }
+  .map-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--surface);
+    font-size: 14px; color: var(--muted); letter-spacing: 1px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #000; border-top: 1px solid var(--border);
+    padding: 60px; display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+  }
+  .footer-brand { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 26px; color: var(--fire); letter-spacing: 1px; }
+  .footer-tagline { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
+  .footer-col h4 { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul a { font-size: 14px; color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.3s; }
+  .footer-col ul a:hover { color: var(--fire); }
+  .footer-bottom {
+    background: #000; border-top: 1px solid var(--border);
+    padding: 20px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--muted); letter-spacing: 1px;
+    flex-wrap: wrap; gap: 12px;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-track { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .gallery-item.tall { grid-row: span 1; }
+  }
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .nav-links { display: none; flex-direction: column; position: fixed; top: 0; right: 0; bottom: 0; width: 260px; background: var(--surface); padding: 80px 40px; gap: 24px; transition: transform 0.4s; transform: translateX(100%); }
+    .nav-links.open { display: flex; transform: translateX(0); }
+    .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 80px 24px; }
+    .about-grid, .join-grid { grid-template-columns: 1fr; gap: 50px; }
+    .about-img-wrap { display: none; }
+    .plans-grid { grid-template-columns: 1fr; }
+    .stats-bar { padding: 36px 24px; }
+    footer { grid-template-columns: 1fr; gap: 40px; padding: 50px 24px; }
+    .footer-bottom { padding: 20px 24px; }
+    .map-overlay { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    .map-wrap { height: auto; flex-direction: column; display: flex; }
+    .map-wrap iframe { height: 380px; }
+    .gallery-head { padding: 0 24px; }
+    .gallery-track { grid-template-columns: 1fr; }
+    .bmi-inputs { grid-template-columns: 1fr; }
+    .about-badge { right: 0; bottom: -20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a class="nav-brand" href="#">GYMNAS<span>TIK</span></a>
+  <ul class="nav-links" id="navlinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#plans">Plans</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#location">Location</a></li>
+  </ul>
+  <a href="#join" class="nav-cta">Join Now</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-tag">Elite Fitness Since 2020</span>
+    <h1>FORGE YOUR<br><em>LEGACY</em></h1>
+    <p>World-class equipment, expert coaches, and a community that pushes you to your absolute limit.</p>
+    <div class="hero-btns">
+      <a href="#join" class="btn-fire">Start Today</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat reveal">
+    <div class="stat-num">2500<sup>+</sup></div>
+    <div class="stat-label">Active Members</div>
+  </div>
+  <div class="stat reveal reveal-delay-1">
+    <div class="stat-num">18</div>
+    <div class="stat-label">Expert Trainers</div>
+  </div>
+  <div class="stat reveal reveal-delay-2">
+    <div class="stat-num">8</div>
+    <div class="stat-label">Fitness Programs</div>
+  </div>
+  <div class="stat reveal reveal-delay-3">
+    <div class="stat-num">5<sup>★</sup></div>
+    <div class="stat-label">Rated Gym</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80" alt="Gym Interior">
+      <div class="about-badge">
+        <strong>5+</strong>
+        <span>Years of Excellence</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-head">
+        <span class="section-label">Who We Are</span>
+        <h2 class="section-title">MORE THAN<br>A GYM</h2>
+        <p class="section-sub">Gymnastik is where ambition meets action. We've built a space that strips away the excuses and gives you everything you need to become unstoppable.</p>
+      </div>
+      <div class="about-features">
+        <div class="about-feat reveal">
+          <div class="about-feat-icon">🏋️</div>
+          <h4>Premium Equipment</h4>
+          <p>Latest machines and free weights from world-leading brands.</p>
+        </div>
+        <div class="about-feat reveal reveal-delay-1">
+          <div class="about-feat-icon">🧬</div>
+          <h4>Science-Based</h4>
+          <p>Programs built on proven exercise science and nutrition research.</p>
+        </div>
+        <div class="about-feat reveal reveal-delay-2">
+          <div class="about-feat-icon">🕐</div>
+          <h4>Open 6AM – 11PM</h4>
+          <p>Train on your schedule, 7 days a week, 365 days a year.</p>
+        </div>
+        <div class="about-feat reveal reveal-delay-3">
+          <div class="about-feat-icon">🔒</div>
+          <h4>Safe & Hygienic</h4>
+          <p>Sanitised daily. Lockers, showers, and secure parking available.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-head reveal">
+    <span class="section-label">What We Offer</span>
+    <h2 class="section-title">OUR PROGRAMS</h2>
+    <p class="section-sub">Eight world-class disciplines. One roof. Every body, every goal, every level.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">🔥</div>
+      <h3>CrossFit</h3>
+      <p>High-intensity functional movements that build explosive strength, endurance, and mental toughness through varied workouts.</p>
+      <span class="service-tag">High Intensity</span>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">🚴</div>
+      <h3>Cycling</h3>
+      <p>Indoor cycling classes with motivating instructors, custom resistance, and a high-energy atmosphere that makes the miles fly by.</p>
+      <span class="service-tag">Cardio</span>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">🥊</div>
+      <h3>Kickboxing</h3>
+      <p>Full-body combat fitness combining martial arts and cardio. Build coordination, discipline, and burn serious calories.</p>
+      <span class="service-tag">Combat Fitness</span>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">🥗</div>
+      <h3>Nutrition Consulting</h3>
+      <p>One-on-one sessions with certified nutritionists to craft personalized meal plans aligned with your fitness goals.</p>
+      <span class="service-tag">Wellness</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🎯</div>
+      <h3>Personal Training</h3>
+      <p>Dedicated trainer attention, tailored programming, and accountability to fast-track your transformation.</p>
+      <span class="service-tag">1-on-1</span>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">🏅</div>
+      <h3>Private Lessons</h3>
+      <p>Exclusive skill-based sessions for focused technique refinement — ideal for athletes and performance-driven individuals.</p>
+      <span class="service-tag">Elite</span>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">💪</div>
+      <h3>Weight Training</h3>
+      <p>Structured lifting programs for hypertrophy, strength, and power with expert form guidance and progressive overload principles.</p>
+      <span class="service-tag">Strength</span>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">💃</div>
+      <h3>Zumba</h3>
+      <p>Dance your way to fitness with Latin-inspired choreography. High energy, zero boredom, maximum calorie burn.</p>
+      <span class="service-tag">Dance Fitness</span>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section id="plans">
+  <div class="section-head reveal" style="text-align:center;">
+    <span class="section-label">Membership</span>
+    <h2 class="section-title">CHOOSE YOUR PLAN</h2>
+    <p class="section-sub" style="margin:14px auto 0;">No hidden fees. No long-term lock-ins. Cancel anytime.</p>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-card reveal">
+      <div class="plan-name">Basic</div>
+      <div class="plan-price"><sup>₹</sup>999<sub>/mo</sub></div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Full Gym Access</li>
+        <li>Locker & Shower</li>
+        <li>Weight Training Area</li>
+        <li class="no">Group Classes</li>
+        <li class="no">Personal Trainer</li>
+        <li class="no">Nutrition Consulting</li>
+      </ul>
+      <div class="plan-cta"><a href="#join" class="btn-outline" style="width:100%;display:block;text-align:center;">Get Started</a></div>
+    </div>
+    <div class="plan-card featured reveal reveal-delay-1">
+      <div class="plan-name">Standard</div>
+      <div class="plan-price"><sup>₹</sup>1499<sub>/mo</sub></div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Full Gym Access</li>
+        <li>Locker & Shower</li>
+        <li>Weight Training Area</li>
+        <li>All Group Classes</li>
+        <li>2 PT Sessions / Month</li>
+        <li class="no">Nutrition Consulting</li>
+      </ul>
+      <div class="plan-cta"><a href="#join" class="btn-fire" style="width:100%;display:block;text-align:center;">Get Started</a></div>
+    </div>
+    <div class="plan-card reveal reveal-delay-2">
+      <div class="plan-name">Premium</div>
+      <div class="plan-price"><sup>₹</sup>2499<sub>/mo</sub></div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li>Full Gym Access</li>
+        <li>Locker & Shower</li>
+        <li>Weight Training Area</li>
+        <li>All Group Classes</li>
+        <li>Unlimited PT Sessions</li>
+        <li>Nutrition Consulting</li>
+      </ul>
+      <div class="plan-cta"><a href="#join" class="btn-outline" style="width:100%;display:block;text-align:center;">Get Started</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" style="padding:100px 0;">
+  <div class="gallery-head reveal">
+    <span class="section-label">Inside Gymnastik</span>
+    <h2 class="section-title">THE EXPERIENCE</h2>
+  </div>
+  <div class="gallery-track">
+    <div class="gallery-item tall">
+      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=900&q=80" alt="Gym Floor">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=600&q=80" alt="Training">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80" alt="Equipment">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600&q=80" alt="Weights">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80" alt="Cardio">
+    </div>
+  </div>
+</section>
+
+<!-- BMI CALCULATOR -->
+<section id="bmi">
+  <div class="bmi-wrap">
+    <div class="section-head reveal" style="text-align:center;">
+      <span class="section-label">Know Your Stats</span>
+      <h2 class="section-title">BMI CALCULATOR</h2>
+      <p class="section-sub" style="margin:14px auto 0;">Calculate your Body Mass Index and find the right program for your goals.</p>
+    </div>
+    <div class="bmi-inputs">
+      <div class="input-group-g">
+        <label>Weight (kg)</label>
+        <input type="number" id="weight" placeholder="e.g. 75" min="1">
+      </div>
+      <div class="input-group-g">
+        <label>Height (cm)</label>
+        <input type="number" id="height" placeholder="e.g. 175" min="1">
+      </div>
+    </div>
+    <button class="btn-fire" style="width:100%;" onclick="calculateBMI()">Calculate BMI</button>
+    <div class="bmi-result" id="bmiResult">
+      <div class="bmi-num" id="bmiNum">—</div>
+      <div class="bmi-category" id="bmiCat">—</div>
+      <div class="bmi-bar">
+        <div class="bmi-bar-fill"></div>
+        <div class="bmi-marker" id="bmiMarker" style="left:0%"></div>
+      </div>
+      <p id="bmiAdvice" style="font-size:13px;color:var(--muted);line-height:1.7;"></p>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="section-head reveal" style="text-align:center;">
+    <span class="section-label">Become a Member</span>
+    <h2 class="section-title">JOIN GYMNASTIK</h2>
+  </div>
+  <div class="join-grid">
+    <div class="qr-box reveal">
+      <h3>SCAN & PAY (UPI)</h3>
+      <div class="qr-placeholder">
+        <!-- Replace src with your actual UPI QR image -->
+        <img src="upi-qr.png" alt="UPI QR Code" onerror="this.style.display='none';this.parentElement.innerHTML+='<p style=\'font-size:12px;color:#555;letter-spacing:1px;padding:20px;text-align:center;\'>[ YOUR QR<br>CODE HERE ]</p>'">
+        <div class="qr-corner tl"></div>
+        <div class="qr-corner tr"></div>
+        <div class="qr-corner bl"></div>
+        <div class="qr-corner br"></div>
+      </div>
+      <p class="qr-note">After payment, send screenshot on WhatsApp</p>
+      <p class="qr-phone">+91 9876543210</p>
+      <a href="https://wa.me/919876543210" target="_blank" class="btn-fire" style="display:block;margin-top:24px;text-decoration:none;">
+        📲 Open WhatsApp
+      </a>
+    </div>
+    <div class="form-box reveal reveal-delay-2">
+      <h3>RESERVE YOUR SPOT</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:28px;">Fill in your details and pay cash at the gym on your first visit.</p>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Your full name" required>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" required>
+      </div>
+      <div class="form-group">
+        <label>Select Plan</label>
+        <select id="plan">
+          <option>Basic — ₹999/mo</option>
+          <option>Standard — ₹1499/mo</option>
+          <option>Premium — ₹2499/mo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Interested In</label>
+        <select id="service">
+          <option>General Gym Access</option>
+          <option>CrossFit</option>
+          <option>Cycling</option>
+          <option>Kickboxing</option>
+          <option>Nutrition Consulting</option>
+          <option>Personal Training</option>
+          <option>Private Lessons</option>
+          <option>Weight Training</option>
+          <option>Zumba</option>
+        </select>
+      </div>
+      <button class="btn-fire" style="width:100%;margin-top:8px;" onclick="sendToWhatsApp()">
+        Reserve & Send via WhatsApp
+      </button>
+      <p class="whatsapp-note">You'll be redirected to WhatsApp to confirm your reservation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location" style="padding:0;">
+  <div class="map-header reveal">
+    <span class="section-label">Find Us</span>
+    <h2 class="section-title">OUR LOCATION</h2>
+  </div>
+  <div class="map-wrap">
+    <div class="map-overlay">
+      <div class="map-detail">
+        <div class="map-icon">📍</div>
+        <div>
+          <h4>Address</h4>
+          <!-- UPDATE THIS ADDRESS -->
+          <p>D-215, Devli Road, Krishna Park Colony,<br>Jawahar Park, Khanpur,<br>New Delhi — 110080</p>
+        </div>
+      </div>
+      <div class="map-detail">
+        <div class="map-icon">🕐</div>
+        <div>
+          <h4>Hours</h4>
+          <p>Mon – Sat: 6:00 AM – 11:00 PM<br>Sunday: 8:00 AM – 9:00 PM</p>
+        </div>
+      </div>
+      <div class="map-detail">
+        <div class="map-icon">📞</div>
+        <div>
+          <h4>Contact</h4>
+          <p>+91 9876543210<br>hello@gymnastik.in</p>
+        </div>
+      </div>
+      <a href="https://maps.app.goo.gl/DDnUBTZ3h8gLA6DJA" target="_blank" class="btn-fire" style="text-decoration:none;text-align:center;display:block;margin-top:8px;">
+        Get Directions →
+      </a>
+    </div>
+    <!-- REPLACE src WITH YOUR GOOGLE MAPS EMBED URL -->
+    <!-- Go to maps.google.com → Share → Embed a map → Copy the iframe src URL -->
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3506.348!2d77.24153!3d28.51234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce10053177777%3A0xafa463946701c9ff!2sGymnas%20tik%20The%20Gym%2C%20D-215%2C%20Devli%20Rd%2C%20Khanpur%2C%20New%20Delhi%2C%20110080!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
+      allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">GYMNASTIK</div>
+    <p class="footer-tagline">Where ordinary people do<br>extraordinary things. Every single day.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Quick Links</h4>
+    <ul>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#plans">Membership Plans</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#join">Join Now</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Programs</h4>
+    <ul>
+      <li><a href="#services">CrossFit</a></li>
+      <li><a href="#services">Kickboxing</a></li>
+      <li><a href="#services">Zumba</a></li>
+      <li><a href="#services">Personal Training</a></li>
+      <li><a href="#services">Nutrition Consulting</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2026 Gymnastik — All Rights Reserved</span>
+  <span>Designed by Priyanshu</span>
+</div>
+
+<script>
+// NAVBAR scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// HAMBURGER menu
+function toggleMenu() {
+  document.getElementById('navlinks').classList.toggle('open');
+}
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navlinks').classList.remove('open'));
+});
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// BMI CALCULATOR
+function calculateBMI() {
+  const w = parseFloat(document.getElementById('weight').value);
+  const h = parseFloat(document.getElementById('height').value) / 100;
+  if (!w || !h || w <= 0 || h <= 0) return;
+  const bmi = (w / (h * h)).toFixed(1);
+  const result = document.getElementById('bmiResult');
+  document.getElementById('bmiNum').textContent = bmi;
+  let cat, advice, pct;
+  if (bmi < 18.5) {
+    cat = 'Underweight'; advice = 'Our nutrition consultants and weight training program can help you build healthy mass.'; pct = 10;
+  } else if (bmi < 25) {
+    cat = 'Healthy Weight ✓'; advice = 'Great work! Maintain your physique with our Standard or Premium membership.'; pct = 35;
+  } else if (bmi < 30) {
+    cat = 'Overweight'; advice = 'Our CrossFit, Cycling, and Kickboxing classes are perfect for burning fat effectively.'; pct = 60;
+  } else {
+    cat = 'Obese'; advice = 'Our personal trainers will create a safe, progressive program to get you on track.'; pct = 85;
+  }
+  document.getElementById('bmiCat').textContent = cat;
+  document.getElementById('bmiAdvice').textContent = advice;
+  document.getElementById('bmiMarker').style.left = pct + '%';
+  result.classList.add('show');
+}
+
+// WHATSAPP RESERVATION
+function sendToWhatsApp() {
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const plan = document.getElementById('plan').value;
+  const service = document.getElementById('service').value;
+  if (!name || !phone) { alert('Please enter your name and phone number.'); return; }
+  const msg = `New Gymnastik Reservation%0A---%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0APlan: ${encodeURIComponent(plan)}%0AProgram: ${encodeURIComponent(service)}`;
+  window.open(`https://wa.me/919876543210?text=${msg}`, '_blank');
+}
+</script>
+</body>
+</html>
