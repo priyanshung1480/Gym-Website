@@ -16,11 +16,11 @@ https://yourusername.github.io/gym-website
 
 (Add screenshots here)
 
-![Homepage](screenshot1.png)
+![Homepage](hero.png)
 
-![Membership Plans](screenshot2.png)
+![Membership Plans](membership.png)
 
-![BMI Calculator](screenshot3.png)
+![BMI Calculator](BMI.png)
 
 ---
 
@@ -59,4 +59,7 @@ https://yourusername.github.io/gym-website
 ---
 
 ## 📂 Project Structure
+index.html images/ README.md 
 
+## Author 
+Priyanshu Negi Frontend Web Developer
