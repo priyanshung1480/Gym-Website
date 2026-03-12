@@ -8,7 +8,7 @@ This project demonstrates a clean UI, responsive layout and user-friendly design
 
 ## 🌐 Live Demo
 
-https://yourusername.github.io/gym-website
+https://priyanshung1480.github.io/Gym-Website/
 
 ---
 
